@@ -2,10 +2,10 @@ import pandas as pd
 import numpy as np
 import pickle
 import graphviz
+import pydotplus
 from graphviz import Source
 from sklearn import tree
-from sklearn.metrics import precision_score, recall_score, f1_score,
-                            confusion_matrix
+from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 
 # One hot encoding function for categorical data
 def encode(df):
@@ -19,6 +19,7 @@ def encode(df):
 		df_enc = df_enc.drop([i], axis=1)
 
 	return df_enc
+
 
 # Scorer for statistics about tree performance
 def get_scores(tree_obj, X, y):
@@ -36,12 +37,15 @@ def get_scores(tree_obj, X, y):
 
 	return res
 
-# Create PDF
-def graph_tree(tree_obj, feats, classes=['N', 'Y'], filename='tree.dot'):
-	dot = Source(tree.export_graphviz(tree_obj, out_file=filename,
-	             feature_names=feats, class_names=classes
-				 filled = True))
 
+# Create PDF
+def graph_tree(tree_obj, feats, classes=['N', 'Y'], filename='tree'):
+	dot_data = Source(tree.export_graphviz(tree_obj, feature_names=feats,
+	                                       class_names=classes, filled = True))
+
+	graph = pydotplus.graph_from_dot_data(dot_data)  
+	graph.write_pdf("{}.pdf".format(filename))
+	
 
 # Extract text rules
 def get_rules(tree_obj, feats):
@@ -84,7 +88,7 @@ def get_rules(tree_obj, feats):
 
 # Save model object
 def save_tree_obj(tree_obj, name='tree.sav'):
-	pickle.dump(tree_obj, open(name, 'wb')
+	pickle.dump(tree_obj, open(name, 'wb'))
 	print('tree object saved as {}!'.format(name))
 	
 	# To reopen the object, use:
