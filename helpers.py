@@ -27,15 +27,13 @@ def get_scores(tree_obj, X, y):
 	prec = precision_score(y, fits)
 	rec = recall_score(y, fits)
 	f1 = f1_score(y, fits)
-	res = confusion_matrix(y, fits)
 
 	print("""\n\n\t\t\tModel Performance: \n
-	         \t\t{}\n
 		     \t\tPrecision: {}\n
 		     \t\tRecall: {}\n
-		     \t\tF1: {}\n""".format(res, prec, rec, f1))
+		     \t\tF1: {}\n""".format(prec, rec, f1))
 
-	return res
+	return confusion_matrix(y, fits)
 
 
 # Create PDF
