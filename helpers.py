@@ -13,12 +13,12 @@ def encode(df):
 	feat_encs = [pd.get_dummies(df[i], prefix=i) for i in feat_objs]
 
 	for i in feat_encs:
-		df_enc = df.join(i)
+		df = df.join(i)
 	
 	for i in feat_objs:
-		df_enc = df_enc.drop([i], axis=1)
+		df = df.drop([i], axis=1)
 
-	return df_enc
+	return df
 
 
 # Scorer for statistics about tree performance
