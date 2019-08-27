@@ -28,7 +28,7 @@ def get_scores(tree_obj, X, y):
 	rec = recall_score(y, fits)
 	f1 = f1_score(y, fits)
 
-	print("""\n\n\t\t\tModel Performance: \n
+	print("""\n\n\t\tModel Performance: \n
 		     \t\tPrecision: {}\n
 		     \t\tRecall: {}\n
 		     \t\tF1: {}\n""".format(prec, rec, f1))
