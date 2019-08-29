@@ -7,20 +7,6 @@ from graphviz import Source
 from sklearn import tree
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 
-# One hot encoding function for categorical data
-def encode(df):
-	feat_objs = [col for col in df if df[col].dtype == 'object']
-	feat_encs = [pd.get_dummies(df[i], prefix=i) for i in feat_objs]
-
-	for i in feat_encs:
-		df = df.join(i)
-	
-	for i in feat_objs:
-		df = df.drop([i], axis=1)
-
-	return df
-
-
 # Scorer for statistics about tree performance
 def get_scores(tree_obj, X, y):
 	fits = tree_obj.predict(X)
