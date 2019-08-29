@@ -1,4 +1,6 @@
 import pandas as pd
+from utilities.timer import time_this
+from sklearn.model_selection import GridSearchCV
 
 # One hot encoding function for categorical data
 def encode(df):
@@ -13,3 +15,14 @@ def encode(df):
 
 	return df
 
+# Run a gridsearch on a model object
+@time_this
+def run_gridsearch(X, y, clf, param_grid, cv=5, scorer='roc_auc'):
+    
+    grid_search = GridSearchCV(clf,
+                               param_grid=param_grid,
+                               cv=cv,
+                               scoring=scorer)
+
+    grid_search.fit(X, y)
+    return  grid_search
