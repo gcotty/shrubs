@@ -1,5 +1,5 @@
 import pandas as pd
-from utilities.util import isin_row
+from utilities.helpers import isin_row
 from utilities.timer import time_this
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import precision_score, confusion_matrix
