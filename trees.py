@@ -36,7 +36,7 @@ def get_rules(tree_obj, feats):
 	left      = tree_obj.tree_.children_left
 	right     = tree_obj.tree_.children_right
 	threshold = tree_obj.tree_.threshold
-	features  = [feats[i] for i in tree.tree_.feature]
+	features  = [feats[i] for i in tree_obj.tree_.feature]
 
 	# Child node ids
 	idx = np.argwhere(left == -1)[:,0]
@@ -64,9 +64,9 @@ def get_rules(tree_obj, feats):
 	for child in idx:
 		for node in recurse(left, right, child):
 			print(node)
-		print("Class values: ", tree.tree_.value[child])
+		print("Class values: ", tree_obj.tree_.value[child])
 
-		bal = tree.tree_.value[child][0][1] / np.sum(tree.tree_.value[child])
+		bal = tree_obj.tree_.value[child][0][1] / np.sum(tree_obj.tree_.value[child])
 		print("Y balance: ", bal, "\n")
 
 
