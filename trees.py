@@ -69,11 +69,3 @@ def get_rules(tree_obj, feats):
 		bal = tree_obj.tree_.value[child][0][1] / np.sum(tree_obj.tree_.value[child])
 		print("Y balance: ", bal, "\n")
 
-
-# Save model object
-def save_tree_obj(tree_obj, name='tree.sav'):
-	pickle.dump(tree_obj, open(name, 'wb'))
-	print('tree object saved as {}!'.format(name))
-	
-	# To reopen the object, use:
-	# tree = pickle.load(open(fname, 'rb'))

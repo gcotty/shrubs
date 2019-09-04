@@ -1,4 +1,5 @@
 import pandas as pd
+from utilities.util import isin_row
 from utilities.timer import time_this
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import precision_score, confusion_matrix
@@ -29,12 +30,6 @@ def run_gridsearch(X, y, clf, param_grid, cv=5, scorer='roc_auc'):
     grid_search.fit(X, y)
     return  grid_search
 
-
-def isin_row(a, b, cols=None):
-	cols = cols or a.columns
-	return reduce(lambda x, y:x&y, [a[f].isin(b[f]) for f in cols])
-
-
 @time_this
 def run_bootstrap(ratio, n_iter, df, target, clf):
 	n = int(len(df) * ratio)
@@ -62,3 +57,11 @@ def run_bootstrap(ratio, n_iter, df, target, clf):
 		models.append(clf)
 
 		return models, c_matx 
+
+# Save model object
+def save_model(clf, name='clf.sav'):
+	pickle.dump(clf, open(name, 'wb'))
+	print('model object saved as {}!'.format(name))
+	
+	# To reopen the object, use:
+	# clf = pickle.load(open(fname, 'rb'))
