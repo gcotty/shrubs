@@ -1,6 +1,8 @@
 import pandas as pd
 from utilities.timer import time_this
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import precision_score, confusion_matrix
+from sklearn.utils import resample
 
 # One hot encoding function for categorical data
 def encode(df):
@@ -26,3 +28,37 @@ def run_gridsearch(X, y, clf, param_grid, cv=5, scorer='roc_auc'):
 
     grid_search.fit(X, y)
     return  grid_search
+
+
+def isin_row(a, b, cols=None):
+	cols = cols or a.columns
+	return reduce(lambda x, y:x&y, [a[f].isin(b[f]) for f in cols])
+
+
+@time_this
+def run_bootstrap(ratio, n_iter, df, target, clf):
+	n = int(len(df) * ratio)
+	c_matx = list()
+	models = list()
+
+	for i in range(n_iter):
+		# Prep test/train splits
+		train = resample(df, n_samples=n)
+		X_train = train.drop([target], axis=1)
+		y_train = train[target]
+
+		test = df[~isin_row(df, train)]
+		X_test = test.drop([target], axis=1)
+		y_test = test[target]
+
+		# Train the model
+		clf.fit(X_train, y_train)
+
+		# Results (defaults to precision_score)
+		preds = clf.predict(X_test)
+		print("Iteration {}: {}".format(i, precision_score(y_test, preds))
+		
+		c_matx.append(confusion_matrix(y_test, preds))
+		models.append(clf)
+
+		return models, c_matx 
